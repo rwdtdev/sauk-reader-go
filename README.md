@@ -4,12 +4,16 @@
 
 ## На чем написан
 
-PHP 7.3<br>
+PHP 7.3
+
+
 BASH-скрипты
 
 ## Установка на контроллер
 
-1. Установить Apache вэб-сервер.<br>
+1. Установить Apache вэб-сервер.
+
+
 Выполнить команды последовательно:
 ```sh
 sudo apt update
@@ -23,7 +27,9 @@ sudo apt install apache2
 ```sh
 sudo systemctl enable apache2
 ```
-2. Установить PHP.<br>
+2. Установить PHP.
+
+
 Выполнить команды последовательно:
 ```sh
 sudo apt install php
@@ -33,8 +39,9 @@ sudo apt install php
 sudo apt install libapache2-mod-php
 ```
 
-3. Скопировать содержимое папки `html` в папку `/var/www/html`<br>
-<br>
+3. Скопировать содержимое папки `html` в папку `/var/www/html`
+
+
 4. Настроить сеть, изменив содержимое файла `/etc/network/interfaces`
 
 ```sh
