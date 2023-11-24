@@ -1,0 +1,29 @@
+
+//Проверка существования файлов в папке files
+//отправление данных в файле на сервер
+//удаление переданного файла
+
+file:/var/www/html/files/1699893782_7799.rfid size:0
+file:/var/www/html/files/1699894382_5377.rfid size:0
+file:/var/www/html/files/1699895647_3722.rfid size:0
+file:/var/www/html/files/1699895821_5426.rfid size:0
+file:/var/www/html/files/1700457930_1203.rfid size:0
+file:/var/www/html/files/1700457935_6995.rfid size:0
+file:/var/www/html/files/1700457940_3487.rfid size:0
+file:/var/www/html/files/1700457945_4752.rfid size:0
+file:/var/www/html/files/1700457950_1193.rfid size:0
+file:/var/www/html/files/1700457955_2941.rfid size:0
+file:/var/www/html/files/1700457960_1234.rfid size:0
+file:/var/www/html/files/1700633193_7168.rfid size:0
+file:/var/www/html/files/1700633198_9992.rfid size:0
+file:/var/www/html/files/1700633203_9875.rfid size:0
+file:/var/www/html/files/1700633208_1872.rfid size:0
+file:/var/www/html/files/1700633213_8702.rfid size:0
+file:/var/www/html/files/1700633218_9925.rfid size:0
+file:/var/www/html/files/1700681223_2309.rfid size:0
+file:/var/www/html/files/1700681228_9935.rfid size:0
+file:/var/www/html/files/1700681233_9211.rfid size:0
+file:/var/www/html/files/1700681238_8573.rfid size:0
+file:/var/www/html/files/1700681243_2022.rfid size:0
+file:/var/www/html/files/1700681248_7436.rfid size:0
+file:/var/www/html/files/1700684959_3656.rfid size:0
