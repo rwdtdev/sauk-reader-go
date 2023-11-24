@@ -62,6 +62,6 @@ gateway 192.168.88.1
 
 ```sh
 */1 * * * * cd /var/www/html/ && /usr/bin/php telemDebian.php > /dev/null 2>&1
-*/1 * * * * cd /var/www/html/ && sudo bash starter.sh > /dev/null 2>&1
+*/1 * * * * cd /var/www/bin/ && sudo bash starter.sh > /dev/null 2>&1
 */1 * * * * cd /var/www/html/ && sudo /usr/bin/php toServer.php > log.txt
 ```

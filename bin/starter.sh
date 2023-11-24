@@ -4,7 +4,7 @@
 line=$(ps aux | grep socketRead.sh | grep -v grep)
 if [ -z "$line" ]
 then
-    cd /var/www/html && sudo bash socketRead.sh &
+    cd /var/www/bin && sudo bash socketRead.sh &
 else
     echo "Soket reader already running."
 fi
