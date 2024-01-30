@@ -64,34 +64,42 @@ func handleConnection(conn net.Conn, endpointURL, retryFile string) {
 
 	log.Printf("Received data: %s", buffer)
 
-	// Unmarshal the JSON data into a map
-	var dataMap map[string]interface{}
-	err = json.Unmarshal(buffer, &dataMap)
-	if err != nil {
-		log.Printf("Error unmarshalling JSON: %v", err)
-		return
+	// Split the buffer into lines
+	lines := bytes.Split(buffer, []byte("\n"))
+	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+
+		// Unmarshal the JSON data into a map for each line
+		var dataMap map[string]interface{}
+		err = json.Unmarshal(line, &dataMap)
+		if err != nil {
+			log.Printf("Error unmarshalling JSON: %v", err)
+			continue
+		}
+
+		// Add the current timestamp
+		dataMap["Timestamp"] = time.Now().Format(time.RFC3339)
+
+		// Marshal the modified data back to JSON
+		modifiedData, err := json.Marshal(dataMap)
+		if err != nil {
+			log.Printf("Error marshalling modified JSON: %v", err)
+			continue
+		}
+
+		// Forward the modified data as a POST request to the endpoint URL
+		// Attempt to send the data
+		resp, err := http.Post(endpointURL, "application/json", bytes.NewBuffer(modifiedData))
+		if err != nil || resp.StatusCode != http.StatusOK {
+			log.Printf("Error forwarding request, saving data for retry: %v", err)
+			saveDataForRetry(modifiedData, retryFile)
+			continue
+		}
+
+		defer resp.Body.Close()
 	}
-
-	// Add the current timestamp
-	dataMap["Timestamp"] = time.Now().Format(time.RFC3339)
-
-	// Marshal the modified data back to JSON
-	modifiedData, err := json.Marshal(dataMap)
-	if err != nil {
-		log.Printf("Error marshalling modified JSON: %v", err)
-		return
-	}
-
-	// Forward the modified data as a POST request to the endpoint URL
-	// Attempt to send the data
-	resp, err := http.Post(endpointURL, "application/json", bytes.NewBuffer(modifiedData))
-	if err != nil || resp.StatusCode != http.StatusOK {
-		log.Printf("Error forwarding request, saving data for retry: %v", err)
-		saveDataForRetry(modifiedData, retryFile)
-		return
-	}
-
-	defer resp.Body.Close()
 }
 
 func saveDataForRetry(data []byte, retryFile string) {
