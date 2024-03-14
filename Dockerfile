@@ -1,5 +1,5 @@
 # Этап сборки Go
-FROM arm64v8/golang:1.21.5 AS builder
+FROM arm64v8/golang:latest AS builder
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o sauk-reader .
 
 # Этап сборки образа
-FROM alpine:latest
+FROM arm64v8/alpine:latest
 
 WORKDIR /root/
 
