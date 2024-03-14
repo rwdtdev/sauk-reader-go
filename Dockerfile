@@ -1,5 +1,5 @@
 # Этап сборки Go
-FROM arm64v8/golang:latest AS builder
+FROM arm64v8/golang:1.21.5 AS builder
 
 WORKDIR /app
 
