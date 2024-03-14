@@ -1,0 +1,25 @@
+image: docker:latest
+services:
+  - docker:dind
+variables:
+  REGISTRY_URL: https://${DOCKER_REGISTRY}
+  IMAGE: ${DOCKER_REGISTRY}/${PROJECT_NAME}:${CI_COMMIT_SHORT_SHA}
+  IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
+
+stages:
+  - builds
+build:
+  stage: build
+  tags:
+    - docker
+  before_script:
+    - apk add --no-cache git # Install Git
+    - sh <(curl -L https://nixos.org/nix/install) --daemon  # Install Nix
+  script:
+    - nix develop .  # Set up development environment
+    - nix build .#  # Build the binary
+    - mv result/bin/sauk-reader ./sauk-reader  # Move binary to current directory
+    - docker build --pull -t $IMAGE .  # Build Docker image
+    - docker push ${DOCKER_REGISTRY}/${PROJECT_NAME}:${IMAGE_TAG}  # Push Docker image to registry
+#  rules:
+#    - when: manual
