@@ -19,7 +19,7 @@ COPY --from=builder /app/sauk-reader .
 
 # Определяем переменные окружения
 ENV LISTEN_PORT 8090
-ENV ENDPOINT_URL http://localhost:3000/api/piscanner
+ENV ENDPOINT_URL https://doss.rwdt.ru/api/piscanner
 ENV RETRY_FILE /tmp/retry
 
 # Запуск приложения при старте контейнера
