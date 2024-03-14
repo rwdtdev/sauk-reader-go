@@ -3,7 +3,6 @@ services:
   - docker:dind
 variables:
   REGISTRY_URL: https://${DOCKER_REGISTRY}
-  IMAGE: ${DOCKER_REGISTRY}/${PROJECT_NAME}:${CI_COMMIT_SHORT_SHA}
   IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
   DOCKER_DRIVER: overlay2
 
@@ -18,5 +17,5 @@ build:
     - apk add --no-cache git # Install Git
     - docker login --username ${DOCKER_USER} --password ${TOKEN} cr.yandex
   script:
-    - docker build --pull -t $IMAGE .
+    - docker build -t ${REGISTRY_URL}/${PROJECT_NAME}:${IMAGE_TAG} .
     - docker push ${DOCKER_REGISTRY}/${PROJECT_NAME}:${IMAGE_TAG}
