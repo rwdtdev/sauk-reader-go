@@ -20,5 +20,5 @@ build:
     - apk add --no-cache git # Install Git
     - docker login --username ${DOCKER_USER} --password ${TOKEN} cr.yandex
   script:
-    - docker build -t ${IMAGE} .
+    - docker build -t cr.yandex/crpv9i7iirujia326c8u/saukreader:${CI_COMMIT_SHORT_SHA} .
     - docker push ${IMAGE} .
