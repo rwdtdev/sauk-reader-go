@@ -10,7 +10,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o sauk-reader .
 
 # Этап сборки образа
-FROM armhf/alpine:latest
+FROM alpine:latest
 
 WORKDIR /root/
 
