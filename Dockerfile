@@ -16,7 +16,6 @@ WORKDIR /root/
 
 # Копируем бинарный файл и файл .env
 COPY --from=builder /app/sauk-reader .
-COPY .env .
 
 # Определяем переменные окружения
 ENV LISTEN_PORT 8090
