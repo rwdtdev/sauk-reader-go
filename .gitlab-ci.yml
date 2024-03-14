@@ -3,10 +3,11 @@ services:
   - docker:dind
 variables:
   REGISTRY_URL: https://${DOCKER_REGISTRY}
-  IMAGE: ${DOCKER_REGISTRY}/${PROJECT_NAME}:001
-  RELEASE: ${DOCKER_REGISTRY}/${PROJECT_NAME}:latest
-  IMAGE_TAG: 001
+  PROJECT_NAME: saukreader
+  IMAGE: ${DOCKER_REGISTRY}/${PROJECT_NAME}:${CI_COMMIT_SHORT_SHA}
+  IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
   DOCKER_DRIVER: overlay2
+  
 
 stages:
   - build
@@ -20,4 +21,4 @@ build:
     - docker login --username ${DOCKER_USER} --password ${TOKEN} cr.yandex
   script:
     - docker build -t ${IMAGE} .
-    - docker push ${DOCKER_REGISTRY}/${PROJECT_NAME}:${IMAGE_TAG}
+    - docker push ${IMAGE} .
