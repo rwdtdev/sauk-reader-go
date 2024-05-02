@@ -7,7 +7,7 @@ WORKDIR /app
 COPY go.mod ./
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o sauk-reader .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -o sauk-reader .
 
 # Этап сборки образа
 FROM alpine:latest
@@ -19,7 +19,7 @@ COPY --from=builder /app/sauk-reader .
 
 # Определяем переменные окружения
 ENV LISTEN_PORT 8090
-ENV ENDPOINT_URL https://doss.rwdt.ru/api/piscanner
+ENV ENDPOINT_URL http://doss.rwdt.ru/api/piscanner
 ENV RETRY_FILE /tmp/retry
 
 # Запуск приложения при старте контейнера
