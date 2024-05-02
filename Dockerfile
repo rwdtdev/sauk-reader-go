@@ -7,10 +7,11 @@ WORKDIR /app
 COPY go.mod ./
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -o sauk-reader .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 GODEBUG=x509ignoreCN=0 go build -a -installsuffix cgo -o sauk-reader .
 
 # Этап сборки образа
 FROM alpine:latest
+RUN apk --no-cache add ca-certificates bash
 
 WORKDIR /root/
 
