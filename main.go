@@ -16,11 +16,15 @@ import (
 // Global variable to manage file lock
 var fileMutex = &sync.Mutex{}
 
+// Initializes the server by reading environment variables, setting up the TCP
+// listener, and starting the retry mechanism for failed requests.
 func main() {
+	// Retrieve environment variables
 	listenPort := os.Getenv("LISTEN_PORT")
 	endpointURL := os.Getenv("ENDPOINT_URL")
 	retryFile := os.Getenv("RETRY_FILE")
 
+	// Validate required environment variables
 	if listenPort == "" || endpointURL == "" {
 		log.Fatal("LISTEN_PORT and ENDPOINT_URL environment variables must be set")
 	}
@@ -28,7 +32,7 @@ func main() {
 		log.Fatal("RETRY_FILE environment variable must be set")
 	}
 
-	// Listen on TCP port
+	// Listen on the specified TCP port
 	listener, err := net.Listen("tcp", ":"+listenPort)
 	if err != nil {
 		log.Fatalf("Failed to listen on port %s: %v", listenPort, err)
@@ -42,16 +46,19 @@ func main() {
 	go retryFailedRequests(endpointURL, retryFile)
 
 	for {
+		// Accept incoming connections
 		conn, err := listener.Accept()
 		if err != nil {
 			log.Printf("Failed to accept connection: %v", err)
 			continue
 		}
 
+		// Handle each connection in a separate goroutine
 		go handleConnection(conn, endpointURL, retryFile)
 	}
 }
 
+// handleConnection processes the incoming connection and forwards data to the endpoint
 func handleConnection(conn net.Conn, endpointURL, retryFile string) {
 	defer conn.Close()
 
@@ -90,7 +97,6 @@ func handleConnection(conn net.Conn, endpointURL, retryFile string) {
 		}
 
 		// Forward the modified data as a POST request to the endpoint URL
-		// Attempt to send the data
 		resp, err := http.Post(endpointURL, "application/json", bytes.NewBuffer(modifiedData))
 		if err != nil || resp.StatusCode != http.StatusOK {
 			log.Printf("Error forwarding request, saving data for retry: %v", err)
@@ -102,6 +108,7 @@ func handleConnection(conn net.Conn, endpointURL, retryFile string) {
 	}
 }
 
+// saveDataForRetry saves the data to a file for future retries in case of failure
 func saveDataForRetry(data []byte, retryFile string) {
 	fileMutex.Lock()
 	defer fileMutex.Unlock()
@@ -128,6 +135,7 @@ func saveDataForRetry(data []byte, retryFile string) {
 	}
 }
 
+// retryFailedRequests periodically retries sending failed requests saved in the retry file
 func retryFailedRequests(endpointURL, retryFile string) {
 	for {
 		fileMutex.Lock()

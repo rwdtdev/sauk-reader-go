@@ -1,12 +1,20 @@
 {
   description = "RWDT sauk reader";
 
+  # A collection of packages for Nix.
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  
+  # A utility library for Nix flakes.
+  # This is used to simplify the flake configuration.
   inputs.flake-utils.url = "github:numtide/flake-utils";
+
+  # A tool to convert Go modules to Nix expressions.
+  # This integrates Go module dependencies into the Nix build system.
   inputs.gomod2nix.url = "github:nix-community/gomod2nix";
   inputs.gomod2nix.inputs.nixpkgs.follows = "nixpkgs";
   inputs.gomod2nix.inputs.flake-utils.follows = "flake-utils";
 
+  # defines what this flake provides, including packages and development shells
   outputs = { self, nixpkgs, flake-utils, gomod2nix }:
     (flake-utils.lib.eachDefaultSystem
       (system:
@@ -18,9 +26,13 @@
           callPackage = pkgs.darwin.apple_sdk_11_0.callPackage or pkgs.callPackage;
         in
         rec {
+          # Package definitions
           packages.default = callPackage ./. {
             inherit (gomod2nix.legacyPackages.${system}) buildGoApplication;
           };
+
+          # Docker container image definition
+          # This creates a Docker image named rwdt-sauk-reader with the version tag 0.1.
           packages.container = pkgs.dockerTools.buildImage {
             name = "rwdt-sauk-reader";
             tag = "0.1";
@@ -32,6 +44,8 @@
             };
             config.Cmd = [ "${packages.default}/bin/sauk-reader" ];
           };
+          
+          # Development shell
           devShells.default = callPackage ./shell.nix {
             inherit (gomod2nix.legacyPackages.${system}) mkGoEnv gomod2nix;
           };
