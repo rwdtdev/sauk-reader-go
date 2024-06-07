@@ -39,10 +39,11 @@
             created = "now";
             copyToRoot = pkgs.buildEnv {
               name = "image-root";
-              paths = [ packages.default ];
+              paths = [ packages.default pkgs.cacert ];
               pathsToLink = [ "/bin" ];
             };
             config.Cmd = [ "${packages.default}/bin/sauk-reader" ];
+            config.Env = [ "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" ];
           };
           
           # Development shell
